@@ -1,0 +1,21 @@
+# 忽略数据集
+dataset/*.jsonl
+dataset/*.bin
+dataset/*.idx
+dataset/*.pth
+
+# 忽略模型权重 (太大了传不上去，手动备份)
+out/
+checkpoints/
+*.pth
+*.pt
+
+# 忽略 Python 缓存
+__pycache__/
+*.pyc
+
+# 忽略环境文件夹
+.conda/
+venv/
+
+MiniMind2/
