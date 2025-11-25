@@ -2,94 +2,89 @@
 
 ![logo](./images/logo.png)
 
-</div>
 
+[中文](./README.md) | English
 
-
-<div align="center">
-
-中文 | [English](./README_en.md)
-
+This project is an independent reproduction based on the architectural design of [MiniMind](https://github.com/jingyaogong/minimind). While inspired by the original repository, this implementation focuses on a complete from-scratch training lifecycle. Instead of simply cloning the weights, I conducted the entire pipeline—from raw data tokenization and pretraining (from random initialization) to supervised fine-tuning (SFT)—to validate the training dynamics and loss convergence on custom hardware.
 
 </div>
 
-本项目是基于 [MiniMind](https://github.com/jingyaogong/minimind) 架构理念的独立复现版本。在致谢原作者优秀工作的同时，本项目重点在于从零构建大模型的完整训练全流程。区别于简单的代码克隆或推理测试，我独立完成了从原始语料的数据预处理、基于随机初始化的预训练（Pretrain），到指令微调（SFT）的完整实现，旨在深入探究 LLM 的底层训练细节与收敛特性。
+* This open-source project aims to train a super-small language model **MiniMind** with only 3 RMB cost and 2 hours,
+  starting completely from scratch.
+* The **MiniMind** series is extremely lightweight, with the smallest version being $\frac{1}{7000}$ the size of GPT-3,
+  making it possible to train quickly on even the most ordinary personal GPUs.
+* The project also open-sources the minimalist structure of the large model, including extensions for shared mixed
+  experts (MoE), dataset cleaning, pretraining, supervised fine-tuning (SFT), LoRA fine-tuning, direct preference
+  optimization (DPO) algorithms, reinforcement learning from AI feedback (RLAIF: PPO/GRPO/SPO), and model distillation 
+  algorithms, along with the full code of the entire process.
+* **MiniMind** also expands into vision multimodal VLM: [MiniMind-V](https://github.com/jingyaogong/minimind-v).
+* All core algorithm code is reconstructed from scratch using native PyTorch! It does not rely on abstract interfaces
+  provided by third-party libraries.
+* This is not only a full-stage open-source reproduction of a large language model but also a tutorial for beginners in
+  LLM.
+* We hope this project will serve as an inspiring example for everyone, helping to enjoy the fun of creation and
+  promoting the progress of the wider AI community!
 
-
-
-* 此开源项目旨在完全从0开始，仅用3块钱成本 + 2小时！即可训练出仅为25.8M的超小语言模型**MiniMind**。
-* **MiniMind**系列极其轻量，最小版本体积是 GPT-3 的 $\frac{1}{7000}$，力求做到最普通的个人GPU也可快速训练。
-* 项目同时开源了大模型的极简结构-包含拓展共享混合专家(MoE)、数据集清洗、预训练(Pretrain)、监督微调(SFT)、LoRA微调、直接偏好优化(DPO)、强化学习训练(RLAIF: PPO/GRPO等)、模型蒸馏等全过程代码。
-* 项目所有核心算法代码均从0使用PyTorch原生重构！不依赖第三方库提供的抽象接口。
-* 这不仅是大语言模型的全阶段开源复现，也是一个入门LLM的教程。
-
-> 为防止误解，“2小时” 基于NVIDIA 3090硬件设备（单卡）测试，“3块钱”指GPU服务器租用成本，具体规格详情见下文。
+> To avoid misunderstanding, the "2 hours" test is based on NVIDIA 3090 hardware (single GPU), and the "3 RMB" refers to the GPU server rental cost. Details of the specifications can be found below.
 
 ---
 
 
-<div align="center">
 
-![minimind2](./images/minimind2.gif)
-
-[🔗🍓推理模型](https://www.modelscope.cn/studios/gongjy/MiniMind-Reasoning) | [🔗🤖常规模型](https://www.modelscope.cn/studios/gongjy/MiniMind) | [🔗🎞️视频介绍](https://www.bilibili.com/video/BV12dHPeqE72/?share_source=copy_web&vd_source=670c2504f88726f8cf4a21ef6147c0e8)
-
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <a href="https://huggingface.co/collections/jingyaogong/minimind-66caf8d999f5c7fa64f399e5" style="text-decoration: none;">
-          <img src="./images/and_huggingface.png" alt="Hugging Face Logo" style="vertical-align: middle; width: auto; max-width: 100%;" />
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://www.modelscope.cn/profile/gongjy" style="text-decoration: none;">
-          <img src="./images/and_modelscope.png" alt="ModelScope Logo" style="vertical-align: middle; width: auto; max-width: 100%;" />
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
-
-
-</div>
 
 # 📌 Introduction
 
+The emergence of Large Language Models (LLMs) has sparked unprecedented global attention to AI. 
+Whether it's ChatGPT, DeepSeek, or Qwen, they all demonstrate stunning performance that is awe-inspiring.
+However, with their massive scale of tens of billions of parameters, they are not only difficult to train on personal devices but nearly impossible to deploy.
+Opening the "black box" of large models to explore their internal mechanisms is truly thrilling!
+Unfortunately, 99% of exploration can only stop at using techniques like LoRA to perform minor fine-tuning on existing large models to learn new instructions or tasks.
+This is like teaching Newton how to use a 21st-century smartphone—while interesting, it completely deviates from the original intent of understanding the essence of physics.
+Meanwhile, third-party large model frameworks and toolkits, such as transformers+trl, expose only highly abstract interfaces.
+With just 10 lines of code, you can complete the entire workflow of "loading model + loading dataset + inference + reinforcement learning."
+While such efficient packaging is convenient, it also acts like a high-speed spacecraft, isolating developers from underlying implementations and hindering deep exploration of LLM core code.
+Yet, "building a plane with Lego is far more exciting than flying in first class!"
+What's worse, the internet is flooded with expensive courses and marketing accounts selling AI tutorials with countless flaws and superficial understanding.
+For this reason, this project's original intention is to lower the barrier to entry for LLM learning, allowing everyone to start by understanding every line of code,
+to personally train an extremely small language model from scratch. Yes, from **training from scratch**, not just **inference**!
+With less than 3 RMB in server costs, you can personally experience the entire process of building a language model from 0 to 1.
+Let's enjoy the fun of creation together!
 
 > [!NOTE]
-> （截至2025-10）MiniMind系列已完成多个型号模型的预训练，最小仅需25.8M（0.02B），即可具备流畅对话能力！
+> (As of 2025-10) The MiniMind series has completed pretraining of multiple model variants, with the smallest being only 25.8M (0.02B), capable of fluent conversation!
 
 <details style="color:rgb(128,128,128)">
 <summary>Models List</summary>
 
-| 模型 (大小)                 | 推理占用 (约) | Release    | 
-|-------------------------|----------|------------|
-| MiniMind2-small (26M)   | 0.5 GB   | 2025.04.26 |
-| MiniMind2-MoE (145M)    | 1.0 GB   | 2025.04.26 |
-| MiniMind2 (104M)        | 1.0 GB   | 2025.04.26 |
-| minimind-v1-small (26M) | 0.5 GB   | 2024.08.28 |
-| minimind-v1-moe (4×26M) | 1.0 GB   | 2024.09.17 |
-| minimind-v1 (108M)      | 1.0 GB   | 2024.09.01 |
+| Model (Size)           | Inference Memory (Approx) | Release    | 
+|------------------------|---------------------------|------------|
+| MiniMind2-small (26M)  | 0.5 GB                    | 2025.04.26 |
+| MiniMind2-MoE (145M)   | 1.0 GB                    | 2025.04.26 |
+| MiniMind2 (104M)       | 1.0 GB                    | 2025.04.26 |
+| minimind-v1-small (26M)| 0.5 GB                    | 2024.08.28 |
+| minimind-v1-moe (4×26M)| 1.0 GB                    | 2024.09.17 |
+| minimind-v1 (108M)     | 1.0 GB                    | 2024.09.01 |
 
 </details>
 
-**项目包含**
+**Project Includes**
 
-- MiniMind-LLM结构的全部代码（Dense+MoE模型）。
-- 包含Tokenizer分词器详细训练代码。
-- 包含Pretrain、SFT、LoRA、RLHF-DPO、RLAIF(PPO/GRPO/SPO)、模型蒸馏的全过程训练代码。
-- 收集、蒸馏、整理并清洗去重所有阶段的高质量数据集，且全部开源。
-- 从0实现预训练、指令微调、LoRA、DPO/PPO/GRPO/SPO强化学习，白盒模型蒸馏。关键算法几乎不依赖第三方封装的框架，且全部开源。
-- 同时兼容`transformers`、`trl`、`peft`等第三方主流框架。
-- 训练支持单机单卡、单机多卡(DDP、DeepSpeed)训练，支持wandb/swanlab可视化训练流程。支持动态启停训练。
-- 在第三方测评榜（C-Eval、C-MMLU、OpenBookQA等）进行模型测试，支持YaRN算法执行RoPE长文本外推。
-- 实现Openai-Api协议的极简服务端，便于集成到第三方ChatUI使用（FastGPT、Open-WebUI等）。
-- 基于streamlit实现最简聊天WebUI前端。
-- 全面兼容社区热门`llama.cpp`、`vllm`、`ollama`推理引擎或`Llama-Factory`训练框架。
-- 复现(蒸馏/RL)大型推理模型DeepSeek-R1的MiniMind-Reason模型，**数据+模型**全部开源！
+- Complete code for MiniMind-LLM structure (Dense + MoE models).
+- Detailed training code for Tokenizer.
+- Complete training code for Pretrain, SFT, LoRA, RLHF-DPO, RLAIF (PPO/GRPO/SPO), and model distillation.
+- Collected, distilled, organized and cleaned high-quality datasets for all stages, all open-sourced.
+- Implemented from scratch: pretraining, instruction fine-tuning, LoRA, DPO/PPO/GRPO/SPO reinforcement learning, and white-box model distillation. Core algorithms barely depend on third-party framework encapsulation, all open-sourced.
+- Compatible with mainstream third-party frameworks like `transformers`, `trl`, `peft`.
+- Training supports single GPU, multiple GPUs on a single machine (DDP, DeepSpeed), supports wandb/swanlab visualization of training process. Supports dynamic training start/stop.
+- Model testing on third-party evaluation leaderboards (C-Eval, C-MMLU, OpenBookQA, etc.), supports YaRN algorithm for RoPE long-text extrapolation.
+- Implements an extremely simple OpenAI API-compliant server, convenient for integration with third-party ChatUI (FastGPT, Open-WebUI, etc.).
+- Implements the simplest chat WebUI frontend based on streamlit.
+- Fully compatible with popular community inference engines `llama.cpp`, `vllm`, `ollama` or training framework `Llama-Factory`.
+- Reproduced (distilled/RL) DeepSeek-R1 reasoning model as MiniMind-Reason model, with **data + models** fully open-sourced!
 
-希望此开源项目可以帮助LLM初学者快速入门！
+We hope this open-source project can help LLM beginners get started quickly!
 
 
+**Acknowledgments**
+
+Special thanks to MiniMind for providing the foundational architecture and inspiration. Building upon the original codebase, this repository represents my end-to-end execution of the LLM training pipeline, including manual environment configuration, full-cycle model training from scratch, and performance evaluation.
