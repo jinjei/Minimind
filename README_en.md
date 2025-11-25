@@ -2,9 +2,10 @@
 
 ![logo](./images/logo.png)
 
-</div>
 
 [中文](./README.md) | English
+
+</div>
 
 This project is an independent reproduction based on the architectural design of [MiniMind](https://github.com/jingyaogong/minimind). While inspired by the original repository, this implementation focuses on a complete from-scratch training lifecycle. Instead of simply cloning the weights, I conducted the entire pipeline—from raw data tokenization and pretraining (from random initialization) to supervised fine-tuning (SFT)—to validate the training dynamics and loss convergence on custom hardware.
 
@@ -83,6 +84,7 @@ Let's enjoy the fun of creation together!
 - Reproduced (distilled/RL) DeepSeek-R1 reasoning model as MiniMind-Reason model, with **data + models** fully open-sourced!
 
 We hope this open-source project can help LLM beginners get started quickly!
+
 
 
 **Acknowledgments**
