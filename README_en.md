@@ -30,6 +30,28 @@ This project is an independent reproduction based on the architectural design of
 
 ---
 
+<div align="center">
+
+![minimind2](./images/minimind2.gif)
+
+[🔗🍓Reason Model](https://www.modelscope.cn/studios/gongjy/MiniMind-Reasoning) | [🔗🤖Standard Model](https://www.modelscope.cn/studios/gongjy/MiniMind) | [🔗🎞️Video Introduction](https://www.bilibili.com/video/BV12dHPeqE72/?share_source=copy_web&vd_source=670c2504f88726f8cf4a21ef6147c0e8)
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <a href="https://huggingface.co/collections/jingyaogong/minimind-66caf8d999f5c7fa64f399e5" style="text-decoration: none;">
+          <img src="./images/and_huggingface.png" alt="Hugging Face Logo" style="vertical-align: middle; width: auto; max-width: 100%;" />
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://www.modelscope.cn/profile/gongjy" style="text-decoration: none;">
+          <img src="./images/and_modelscope.png" alt="ModelScope Logo" style="vertical-align: middle; width: auto; max-width: 100%;" />
+        </a>
+      </td>
+    </tr>
+  </table>
+</div></div>
 
 
 
